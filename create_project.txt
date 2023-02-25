@@ -1,0 +1,8 @@
+create  new folder to store the project.
+
+open cmd in that folder
+
+To create angular project just type 'ng new project_name'.
+
+it will ask to add angular routing and stylesheet select as per need.
+

@@ -1,0 +1,21 @@
+how to add bootstrap in angular:
+
+1)on terminal type 'npm install bootstrap' hit enter
+
+2)type 'npm install jquery' hit enter.(both will be visible in package.json)
+
+3)in angular.json  find build in it find styles inside it give path(node _modules) of bootstrap same inside scripts.
+
+
+To create new project in angular
+1)ng create project_name.
+
+To run project 
+1)ng serve
+
+To create new component 
+1)ng generate component_name
+
+2)ng generate component_name folder_name.
+
+
