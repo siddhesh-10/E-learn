@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
   public signOut(): void {
     this.cognitoService.signOut()
     .then(() => {
-      this.router.navigate(['/provider/sign-in']);
+      this.router.navigate(['/student/sign-in']);
     });
   }
 

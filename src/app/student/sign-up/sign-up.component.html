@@ -3,7 +3,7 @@
       <div class="card">
         <h3 class="text-center">{{message}}</h3>
         <div class="card-body" *ngIf="!isConfirm">
-          <h2 class="text-center">Provider Signup</h2>
+          <h2 class="text-center">Student Signup</h2>
           <div class="row">
             <div class="col mb-2">
               <label for="email" class="form-label">Email:</label>
@@ -14,6 +14,12 @@
             <div class="col mb-2">
               <label for="name" class="form-label">Name:</label>
               <input type="text" id="name" name="name" #name="ngModel" [(ngModel)]="user.name" class="form-control form-control-sm">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-2">
+              <label for="mobile" class="form-label">Mobile:</label>
+              <input type="text" id="mobile" name="mobile" #name="ngModel" [(ngModel)]="user.mobile" class="form-control form-control-sm">
             </div>
           </div>
           <div class="row">
@@ -54,7 +60,7 @@
           </div>
           
         </div>
-        <a routerLink="/provider/sign-in" class="link-primary text-center"><p>Already have account?</p></a>
+        <a routerLink="/student/sign-in" class="link-primary text-center"><p>Already have account?</p></a>
        
       </div>
     </div>

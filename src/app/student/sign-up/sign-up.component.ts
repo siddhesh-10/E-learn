@@ -40,7 +40,7 @@ export class SignUpComponent {
     this.loading = true;
     this.cognitoService.confirmSignUp(this.user)
     .then(() => {
-      this.router.navigate(['/provider/sign-in']);
+      this.router.navigate(['/student/sign-in']);
     }).catch(() => {
       this.loading = false;
     });

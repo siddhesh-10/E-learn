@@ -24,7 +24,7 @@ export class ProfileComponent implements OnInit {
       this.isAuthenticated = success;
       if(!this.isAuthenticated)
       {
-        this.router.navigate(['/provider/sign-in']);
+        this.router.navigate(['/student/sign-in']);
       }
     });
     this.cognitoService.getUser()
@@ -46,7 +46,7 @@ export class ProfileComponent implements OnInit {
   public signOut(): void {
     this.cognitoService.signOut()
     .then(() => {
-      this.router.navigate(['/provider/sign-in']);
+      this.router.navigate(['/student/sign-in']);
     });
   }
 }
