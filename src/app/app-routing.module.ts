@@ -14,6 +14,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { CreateCourseComponent } from './provider/create-course/create-course.component';
 import { ProviderDashbordComponent } from './provider/provider-dashbord/provider-dashbord.component';
 import { UpdateCourseComponent } from './provider/update-course/update-course.component';
+import { StudentDashbordComponent } from './student/student-dashbord/student-dashbord.component';
+import { MyCoursesComponent } from './student/my-courses/my-courses.component';
+import { ViewCourseComponent } from './student/view-course/view-course.component';
 const routes: Routes = [
   
   
@@ -29,6 +32,9 @@ const routes: Routes = [
   {path:'student/sign-in', component:studSignInComponent},
   {path:'student/sign-up',component:studSignUpComponent},
   {path:'student/profile',component:studProfileComponent},
+  {path:'student/student-dashbord', component:StudentDashbordComponent},
+  {path:'student/my-courses', component:MyCoursesComponent},
+  {path:'student/view-course', component:ViewCourseComponent},
   {path:'**', component:AppComponent}
 ];
 

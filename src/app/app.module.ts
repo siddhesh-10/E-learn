@@ -16,6 +16,9 @@ import { CreateCourseComponent } from './provider/create-course/create-course.co
 import { HttpClientModule } from '@angular/common/http';
 import { ProviderDashbordComponent } from './provider/provider-dashbord/provider-dashbord.component';
 import { UpdateCourseComponent } from './provider/update-course/update-course.component';
+import { StudentDashbordComponent } from './student/student-dashbord/student-dashbord.component';
+import { MyCoursesComponent } from './student/my-courses/my-courses.component';
+import { ViewCourseComponent } from './student/view-course/view-course.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,7 +33,10 @@ import { UpdateCourseComponent } from './provider/update-course/update-course.co
     DashboardComponent,
     CreateCourseComponent,
     ProviderDashbordComponent,
-    UpdateCourseComponent
+    UpdateCourseComponent,
+    StudentDashbordComponent,
+    MyCoursesComponent,
+    ViewCourseComponent
   ],
   imports: [
     BrowserModule,

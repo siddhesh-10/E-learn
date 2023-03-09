@@ -10,7 +10,7 @@ import { GetCoursesService } from '../get-courses.service';
 })
 
 export class ProviderDashbordComponent implements OnInit{
-  loading: boolean;
+  loading: boolean=true;
   user: IUser;
   isAuthenticated: boolean;
   courseData={
@@ -46,6 +46,7 @@ export class ProviderDashbordComponent implements OnInit{
   }
 
   public ngOnInit(): void {
+    this.courseData={Items: []};
     this.cognitoService.isAuthenticated()
     .then((success: boolean) => {
       this.isAuthenticated = success;
@@ -61,6 +62,7 @@ export class ProviderDashbordComponent implements OnInit{
         this.courseData=data;
          this.myArray = Object.keys(data).map(key => ({key, value: data[key]}));
         console.log(JSON.stringify(this.courseData));
+        this.loading=false;
       });
     });
   }

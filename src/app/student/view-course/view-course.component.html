@@ -27,29 +27,35 @@
     </div>
   </nav>
   </header>
-<main>
-<div class="row justify-content-center my-5">
-    <div class="col-lg-4 col-sm-10">
-      <div class="row">
-        <div class="col mb-2">
-          <label for="email" class="form-label">Email:</label>
-          <input type="email" id="email" name="email" #email="ngModel" [ngModel]="user.email" disabled class="form-control form-control-sm">
-        </div>
-      </div>
-      <div class="row">
-        <div class="col mb-2">
-          <label for="name" class="form-label">Name:</label>
-          <input type="text" id="name" name="name" #name="ngModel" [(ngModel)]="user.name" class="form-control form-control-sm">
-        </div>
-      </div>
-      <div class="row">
-        <div class="col d-grid">
-          <button type="button" (click)="update()" class="btn btn-sm btn-dark" [disabled]="loading">
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="loading"></span>
-            Update
-          </button>
-        </div>
-      </div>
+
+    <main>
+      <div class="container mt-5">
+      <div class="row text-center mt-5">
+        
+      <h2>{{course.CourseDetails.title}}</h2>
+      
     </div>
+      <div class="row mt-3">
+      <h4>Description:</h4><p> {{course.CourseDetails.description}}</p>
+      <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width.%]="progess">
+        {{progess}}
+          </div>
+    </div>
+    <div class="mt-5 text-center">
+      <h4>Video</h4>
+      <hr>
+    </div>
+      <div class="my-5 text-center">
+    <video  class="border"   width="320" *ngIf="course.CourseDetails.videoUrl" id="video" (timeupdate)="onTimeUpdate()" (end)="completeCourse()" height="240" controls>
+      <source src={{course.CourseDetails.videoUrl}} type="video/mp4">
+      
+    Your browser does not support the video tag.
+    </video>
+    
+    <hr> 
+    
   </div>
-</main>
+  
+  </div>
+  
+  </main>

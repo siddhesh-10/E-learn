@@ -1,0 +1,20 @@
+header{
+    z-index: 9999;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.3);
+}
+
+main{
+    height: 100vh;
+  top:0px;
+    background-image:url("../../assets/bg1.png")!important;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.tall{
+    height: 12vh;
+}

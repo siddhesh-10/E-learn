@@ -1,0 +1,11 @@
+main{
+   
+    height: 100vh;
+    background-image: url("../../../assets/bg1.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.tall{
+    height: 12vh;
+}

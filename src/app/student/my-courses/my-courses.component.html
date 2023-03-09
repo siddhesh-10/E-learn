@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>provider-dashboard</title>
+    <title>my-courses</title>
 </head>
 <body>
   <header>
@@ -13,36 +13,39 @@
         <a class="navbar-brand text-white" href="#"><h3>E-learn</h3></a>
     
         <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="text-white navbar-toggler-icon-white"></span>
+          <span class="text-white navbar-toggler-icon"></span>
         </button>
     
         <div id="navbarContent" class="collapse navbar-collapse">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link text-white" routerLink="/provider/profile" routerLinkActive="active" *ngIf="isAuthenticated">Profile</a>
+              <a class="nav-link text-white" routerLink="/student/profile" routerLinkActive="active" *ngIf="isAuthenticated">Profile</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" routerLink="/provider/dashbord" routerLinkActive="active" *ngIf="isAuthenticated">Dashbord</a>
+              <a class="nav-link text-white" routerLink="/student/student-dashbord" routerLinkActive="active" *ngIf="isAuthenticated">Dashbord</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" routerLink="/provider/create-course" routerLinkActive="active" *ngIf="isAuthenticated">Create</a>
+              <a class="nav-link text-white" routerLink="/student/my-courses" routerLinkActive="active" *ngIf="isAuthenticated">My Courses</a>
+            </li>
+            <li class="nav-item">
+              
             </li>
           </ul>
-          <span class="d-flex"><a class="btn btn-warning text-white" routerLink="" (click)="signOut()" *ngIf="isAuthenticated"><b>Sign out</b></a></span>
+          <span class="flex-d"><a class="text-white btn btn-warning p-2" routerLink="" (click)="signOut()" *ngIf="isAuthenticated"><b> Sign out</b></a></span>
         </div>
       </div>
     </nav>
     </header>
       <main>
-        <div class="row mx-3">
+        <div class="row mx-3" *ngIf="loading==false">
          
-          <div class="col-lg-3 col-sm-6 g-4" *ngFor="let Items of courseData.Items">
+          <div class="col-lg-3 col-sm-6 g-4" *ngFor="let Items of myCourses.Items">
             <div class="card">
               <h5 class="card-header">{{Items.CourseDetails.title}}</h5>
               <div class="card-body">
                 
                 <p class="card-text">{{Items.CourseDetails.description}}</p>
-                <a routerLink="/provider/update-course" [state]="{Items}" class="btn btn-primary">Go to Course</a>
+                <a routerLink="/student/view-course" [state]="{Items}" class="btn btn-primary">Go to Course</a>
               </div>
             </div>
           </div>

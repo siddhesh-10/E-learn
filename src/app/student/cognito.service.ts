@@ -73,6 +73,7 @@ export class CognitoService {
     } else {
       return this.getUser()
       .then((user: any) => {
+        console.log(user+"in cognito");
         if (user) {
           return true;
         } else {

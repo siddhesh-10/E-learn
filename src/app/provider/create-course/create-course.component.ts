@@ -1,16 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { VideoUploadService } from '../video-upload.service';
-import { HttpClient ,HttpHeaders} from '@angular/common/http';
+import { HttpClient ,HttpHeaders,HttpEvent, HttpEventType,HttpResponse} from '@angular/common/http';
 import { IUser, CognitoService } from '../cognito.service';
 import { Router } from '@angular/router';
+import * as AWS from 'aws-sdk/global';
+import * as S3 from 'aws-sdk/clients/s3';
+import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-create-course',
   templateUrl: './create-course.component.html',
   styleUrls: ['./create-course.component.css']
 })
 export class CreateCourseComponent implements OnInit {
-  
+  progress: number = 0;
   videoForm: FormGroup;
   loading: boolean;
   user: IUser;
@@ -82,32 +85,66 @@ export class CreateCourseComponent implements OnInit {
     console.log(JSON.stringify(body));
     formData.append('title', body.title);
     formData.append('description', body.description);
-    formData.append('file', body.file);
-    formData.append('ProviderID',body.ProviderID);
-  //   if( formData.get('file')!=null &&  this.videoForm.get('file')!.valid)
-  //   {
-  //   const tempData=formData;
-   
-  //  }
-  //  else
-  //  {
-  //   console.log("upload all details");
-  //   this.message="upload all details";
-  //  }
-   console.log(formData+" dd");
-  //  this.videoUploadService.uploadVideo(formData).subscribe(res => {
-  //    console.log(res);
-  //  });
-  // let headers = new HttpHeaders({
-  //   'Content-Type': 'multipart/form-data',
-  //  });
-// let options = { headers: headers };
-  this.http.post<any>('https://anbhkc01l2.execute-api.ap-northeast-1.amazonaws.com/Dev1/courses', formData).subscribe(data => {
-    console.log(data);
-    this.loading=false;
-    this.router.navigate(['/provider/dashbord']);
     
+    formData.append('ProviderID',body.ProviderID);
+     
+    const { content, filename, contentType } =this.videoFile;
+    const videoKey = `videos/${body.ProviderID}/${body.title}.mp4`;
+    const bucketName = 'courseswebsite';
+
+    const uploadParams = {
+      Bucket: bucketName,
+      Key: videoKey,
+      Body: this.videoFile, // Use the decoded video data as the Body parameter
+      ContentType: contentType,
+     Conditions: [
+              ['acl', 'public-read']   
+          ],
+          ACL: 'public-read'
+    };
+    const bucket = new S3(
+      {
+          accessKeyId: environment.s3.accesskey,
+          secretAccessKey: environment.s3.secret,
+          region: 'ap-northeast-1'
+      }
+  );
+  console.log(content+" file c"+this.videoFile+" "+contentType);
+  bucket.upload(uploadParams).on('httpUploadProgress',  (evt) => {
+    console.log(evt.loaded + ' of ' + evt.total + ' Bytes');
+    this.progress = Math.round(100 * evt.loaded / evt.total);
+}).send( (err: any, data: any) => {
+    if (err) { 
+        console.log('There was an error uploading your file: ', err);
+        return false;
+    }
+    console.log('Successfully uploaded file.', data);
+    formData.append('file', data.Location);
+    this.http.post<any>('https://anbhkc01l2.execute-api.ap-northeast-1.amazonaws.com/Dev1/courses', formData,{
+      reportProgress: true,
+      observe: 'events',
+  })
+    .subscribe(event => {
+      if (event.type === HttpEventType.UploadProgress) {
+  
+        
+      } else if (event instanceof HttpResponse) {
+  
+        // Close the progress-stream if we get an answer form the API
+        // The upload is complete
+       
+        this.loading=false;
+        this.router.navigate(['/provider/dashbord']);
+      }
+         
+          
+      }
+    )
+    return true;
 });
+
+ 
+
   }
 
 
