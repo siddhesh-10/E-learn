@@ -72,19 +72,19 @@ export class MyCoursesComponent implements OnInit{
         try{
           // @ts-ignore
           this.course=stateData!.Items;
-          console.log(this.course);
+          
         }
         catch(err)
         {
-          console.log(err);
+          
         }
       });
       this.cognitoService.getUser()
       .then((user: any) => {
         this.user = user.attributes;
-        console.log("this is studentId: "+this.user.email);
+        
         this.getCourses.myCourses(this.user.email).subscribe((data:any)=>{
-          console.log(JSON.stringify(data));
+          
           this.myCourses=data;
           this.loading=false;
          });

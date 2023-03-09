@@ -68,20 +68,20 @@ export class UpdateCourseComponent implements OnInit{
         myVideo.src = this.course.CourseDetails.videoUrl;
         myVideo.load();
         myVideo.play();
-        console.log("this is video "+myVideo);
-        console.log("this is course id for getting all students progress:"+this.course.CourseID);
+        
+        
         this.deleteCourses.getProgress(this.course.CourseID).subscribe((data:any)=>{
           this.progressTable=data;
-          console.log("this is progess data: "+JSON.stringify(this.progressTable));
+          
           this.loading=false;
         });
       }
       catch(err)
       {
-        console.log(err);
+        
       }
       
-      console.log("data from component"+JSON.stringify(this.course));
+      
      
     });
 
@@ -89,7 +89,7 @@ export class UpdateCourseComponent implements OnInit{
     .then((user: any) => {
       this.user = user.attributes;
      
-        console.log(JSON.stringify(this.user.email));
+        
       });
    
   }
@@ -101,7 +101,7 @@ export class UpdateCourseComponent implements OnInit{
       this.videoFile = event.target.files[0];
       const title= this.videoForm.get('title');
       const description=this.videoForm.get('description');
-      console.log(this.videoFile+" this is file");
+      
       // this.videoForm.get('file').setValue(file);
       this.videoForm.setValue
       {
@@ -113,13 +113,13 @@ export class UpdateCourseComponent implements OnInit{
   }
 
   public Delete(){
-    console.log("ProviderID IN deleTE :"+this.user.email);
+    
     this.deleteCourses.deleteCourses(this.user.email, this.course.CourseID).subscribe((data: any) => {
-      console.log("deleted data"+JSON.stringify(data));
+      
       this.deletedata = data;
 
       this.router.navigateByUrl("/provider/dashbord");
-      console.log("deleted data"+JSON.stringify(this.deletedata));
+      
     });
   }
 
@@ -136,19 +136,19 @@ export class UpdateCourseComponent implements OnInit{
       file: this.videoFile,
       ProviderID:this.user.email
     }
-    console.log(JSON.stringify(body));
+    
     formData.append('title', body.title);
     formData.append('description', body.description);
     // formData.append('file', body.file);
     formData.append('ProviderID',this.user.email);
     formData.append('CourseID', this.course.CourseID)
-    console.log("this is courseid: "+formData.get('CourseID'));
-    console.log('this is video'+this.videoFile);
+    
+    
     var modal = document.querySelector(".modal");
     if(this.videoFile==undefined)
     {
       this.http.put<any>('https://anbhkc01l2.execute-api.ap-northeast-1.amazonaws.com/Dev1/courses', formData).subscribe(data => {
-    console.log(data);
+    
     this.progress=100;
     this.loading=false;
     //this.showmodal=false;
@@ -180,16 +180,16 @@ export class UpdateCourseComponent implements OnInit{
             region: 'ap-northeast-1'
         }
     );
-    console.log(content+" file c"+this.videoFile+" "+contentType);
+    
     bucket.upload(uploadParams).on('httpUploadProgress',  (evt) => {
-      console.log(evt.loaded + ' of ' + evt.total + ' Bytes');
+      
       this.progress = Math.round(100 * evt.loaded / evt.total);
   }).send( (err: any, data: any) => {
       if (err) { 
-          console.log('There was an error uploading your file: ', err);
+          
           return false;
       }
-      console.log('Successfully uploaded file.', data);
+      
       formData.append('file', data.Location);
       this.http.post<any>('https://anbhkc01l2.execute-api.ap-northeast-1.amazonaws.com/Dev1/courses', formData,{
         reportProgress: true,

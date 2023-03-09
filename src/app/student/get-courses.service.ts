@@ -39,8 +39,8 @@ export class GetCoursesService {
       let params = new HttpParams();
       params = params.append("CourseID",CourseID);
       params = params.append("StudentID", StudentID);
-      console.log("studentID IN GET PROGRESS"+params.get('StudentID'));
-      console.log("courseID IN GET PROGRESS"+params.get('CourseID'));
+      
+      
       return this.http.get('https://anbhkc01l2.execute-api.ap-northeast-1.amazonaws.com/Dev1/getstudentprogress',{params:params});
     }
 

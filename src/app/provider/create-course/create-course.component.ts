@@ -61,7 +61,7 @@ export class CreateCourseComponent implements OnInit {
       this.videoFile = event.target.files[0];
       const title= this.videoForm.get('title');
       const description=this.videoForm.get('description');
-      console.log(this.videoFile+" this is file");
+      
       // this.videoForm.get('file').setValue(file);
       this.videoForm.setValue
       {
@@ -82,7 +82,7 @@ export class CreateCourseComponent implements OnInit {
       file: this.videoFile,
       ProviderID:this.user.email
     }
-    console.log(JSON.stringify(body));
+    
     formData.append('title', body.title);
     formData.append('description', body.description);
     
@@ -109,16 +109,16 @@ export class CreateCourseComponent implements OnInit {
           region: 'ap-northeast-1'
       }
   );
-  console.log(content+" file c"+this.videoFile+" "+contentType);
+  
   bucket.upload(uploadParams).on('httpUploadProgress',  (evt) => {
-    console.log(evt.loaded + ' of ' + evt.total + ' Bytes');
+    
     this.progress = Math.round(100 * evt.loaded / evt.total);
 }).send( (err: any, data: any) => {
     if (err) { 
-        console.log('There was an error uploading your file: ', err);
+        
         return false;
     }
-    console.log('Successfully uploaded file.', data);
+    
     formData.append('file', data.Location);
     this.http.post<any>('https://anbhkc01l2.execute-api.ap-northeast-1.amazonaws.com/Dev1/courses', formData,{
       reportProgress: true,
@@ -168,17 +168,17 @@ export class CreateCourseComponent implements OnInit {
 //   const multipart =  require('body-parser');
 
 // const requestBody = multipart.parse(event) // spotText === true response file will be Buffer and spotText === false: String
-//   console.log("This is request body",requestBody);
+//   
 //   const ProviderID = requestBody.ProviderID;
 
 //   const videoKey = `videos/${ProviderID}/${requestBody.title}.mp4`;
-//   console.log(videoKey);
+//   
 
-//   console.log("This is file ",requestBody.file);
+//   
 
 //   // Decode the base64-encoded video file
 //   const videoData =requestBody.file;
-//    console.log("videoData "+videoData);
+//    
 //   const d = new Date();
 //   const courseId = ProviderID + d;
   
@@ -209,10 +209,10 @@ export class CreateCourseComponent implements OnInit {
 
 //   try {
 //     const uploadResult = await s3.upload(uploadParams).promise();
-//     console.log("This is Upload Result",JSON.stringify(uploadResult));
+//     
 //     putParams.Item.CourseDetails.videoUrl = uploadResult.Location; // Update video URL with S3 object URL
 //     const dynamoResult = await docClient.put(putParams).promise();
-//     console.log("This is Dynamo Result", dynamoResult);
+//     
 //     return {
 //       statusCode: 200,
 //       headers:{
@@ -226,7 +226,7 @@ export class CreateCourseComponent implements OnInit {
 //       }),
 //     };
 //   } catch (error) {
-//     console.log(error);
+//     
 //     return {
 //       statusCode: 500,
 //       body: JSON.stringify({

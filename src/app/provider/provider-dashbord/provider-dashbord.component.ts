@@ -61,7 +61,7 @@ export class ProviderDashbordComponent implements OnInit{
       this.getCoursesService.getCourses(user.attributes.email).subscribe((data: any) => {
         this.courseData=data;
          this.myArray = Object.keys(data).map(key => ({key, value: data[key]}));
-        console.log(JSON.stringify(this.courseData));
+        
         this.loading=false;
       });
     });

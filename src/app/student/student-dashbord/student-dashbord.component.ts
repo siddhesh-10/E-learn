@@ -87,18 +87,18 @@ export class StudentDashbordComponent implements OnInit{
     .then((user: any) => {
       this.user = user.attributes;
     }).then((data:any)=>{
-    console.log("student id to access my courses: "+this.user.email);
+    
     this.getCourses.myCourses(this.user.email).subscribe((myCourses:any)=>{
       this.myCourses=myCourses;
-      console.log("my courses"+JSON.stringify(this.myCourses));
+      
 
       this.getCourses.getAllCourses().subscribe((data: any) => {
         this.courseData=data;
         
-        console.log(JSON.stringify(this.courseData));
+        
         if(this.myCourses.Items.length>0){
           for(let Course of this.courseData){
-            console.log("my courses"+JSON.stringify(this.myCourses));
+            
             this.flag = true;
               for(let myCourse of this.myCourses.Items){
                 if(Course.CourseID == myCourse.CourseID){
@@ -108,7 +108,7 @@ export class StudentDashbordComponent implements OnInit{
               }
               if(this.flag){
                   this.dashbordData.push(Course);
-                  console.log(JSON.stringify(Course));
+                  
               }
           }
         }else{
@@ -123,9 +123,9 @@ export class StudentDashbordComponent implements OnInit{
   public takeCourse(CourseID:any){
     this.getCourses.takeCourse(this.user.email,CourseID).subscribe((data:any)=>{
     
-      console.log("courseid added in student table"+JSON.stringify(data));
+      
       this.getCourses.updateProgress(this.user.email,CourseID).subscribe((data1:any)=>{
-        console.log("record added in progess table"+JSON.stringify(data1));
+        
       });
       this.router.navigate(["/student/my-courses"]);
     });

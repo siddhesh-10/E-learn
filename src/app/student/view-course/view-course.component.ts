@@ -60,7 +60,7 @@ export class ViewCourseComponent implements OnInit{
       }
       const stateData=this.location.getState();
       
-      console.log("this is state data"+JSON.stringify(stateData));
+      
       try{
         // @ts-ignore
         this.course=stateData.Items;
@@ -68,23 +68,23 @@ export class ViewCourseComponent implements OnInit{
         .then((user: any) => {
           this.user = user.attributes;
          
-            console.log(JSON.stringify(this.user.email));
+            
           
-        console.log("this is in course"+JSON.stringify(this.course));
+        
         this.getCourses.getProgess(this.course.CourseID,this.user.email).subscribe((data:any)=>{
           this.progess=data;
           this.video= document.getElementById('video');
           this.video.currentTime=((this.video.duration*this.progess)/100);
-          console.log(JSON.stringify(this.progess));
+          
       });
     });
       }
       catch(err)
       {
-        console.log(err);
+        
       }
       
-      console.log("data from component"+JSON.stringify(this.course));
+      
      
     });
 
@@ -105,7 +105,7 @@ export class ViewCourseComponent implements OnInit{
     if((this.percentage-temp)>1)
     this.getCourses.updateProgressvalue(this.course.CourseID,this.user.email,this.percentage).subscribe((data:any)=>{
       this.progess=this.percentage;
-      console.log(JSON.stringify(this.progess));
+      
   });
   }
  public videoplay()
@@ -129,7 +129,7 @@ export class ViewCourseComponent implements OnInit{
       this.videoFile = event.target.files[0];
       const title= this.videoForm.get('title');
       const description=this.videoForm.get('description');
-      console.log(this.videoFile+" this is file");
+      
       // this.videoForm.get('file').setValue(file);
       this.videoForm.setValue
       {
@@ -141,10 +141,10 @@ export class ViewCourseComponent implements OnInit{
   }
   public completeCourse()
   {
-    console.log("course completed")
+    
     this.getCourses.updateProgressvalue(this.course.CourseID,this.user.email,100).subscribe((data:any)=>{
       this.progess=this.percentage;
-      console.log(JSON.stringify(this.progess));
+      
       
     });
     }
