@@ -1,0 +1,1066 @@
+{
+  "service": {
+    "service": "elearn-bot-serverless2",
+    "serviceObject": {
+      "name": "elearn-bot-serverless2"
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs12.x",
+      "stage": "dev",
+      "region": "ap-northeast-1",
+      "versionFunctions": true,
+      "compiledCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "ServerlessDeploymentBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketEncryption": {
+                "ServerSideEncryptionConfiguration": [
+                  {
+                    "ServerSideEncryptionByDefault": {
+                      "SSEAlgorithm": "AES256"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "BotRuntimeRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lexv2.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Path": "/",
+              "Policies": [
+                {
+                  "PolicyName": "AmazonLexV2BotPolicy",
+                  "PolicyDocument": {
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "lex:PostText"
+                        ],
+                        "Resource": "*"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "ELearnServerlessTemplateBot": {
+            "DependsOn": [
+              "BotRuntimeRole"
+            ],
+            "Type": "AWS::Lex::Bot",
+            "Properties": {
+              "Name": "E-LearnServerlessBot",
+              "RoleArn": {
+                "Fn::GetAtt": [
+                  "BotRuntimeRole",
+                  "Arn"
+                ]
+              },
+              "DataPrivacy": {
+                "ChildDirected": false
+              },
+              "IdleSessionTTLInSeconds": 300,
+              "Description": "E-Learn online learning platform",
+              "AutoBuildBotLocales": false,
+              "BotLocales": [
+                {
+                  "LocaleId": "en_US",
+                  "Description": "Book a trip bot Locale",
+                  "NluConfidenceThreshold": 0.4,
+                  "Intents": [
+                    {
+                      "Name": "providerLogin",
+                      "Description": "Provider Login",
+                      "SampleUtterances": [
+                        {
+                          "Utterance": "How to login as provider?"
+                        },
+                        {
+                          "Utterance": "How to register as provider?"
+                        },
+                        {
+                          "Utterance": "Provider login"
+                        },
+                        {
+                          "Utterance": "Provider Registration"
+                        }
+                      ],
+                      "IntentClosingSetting": {
+                        "ClosingResponse": {
+                          "MessageGroupsList": [
+                            {
+                              "Message": {
+                                "PlainTextMessage": {
+                                  "Value": "Following are steps to login as Provider :  1) click on provider login button 2) if you are new user then click on register 3) Fill the registration form 4) Then login using registration details"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Name": "courseDetails",
+                      "Description": "course Details",
+                      "SampleUtterances": [
+                        {
+                          "Utterance": "Give me details of course"
+                        },
+                        {
+                          "Utterance": "Give me details of {course}"
+                        },
+                        {
+                          "Utterance": "Give details of {course}"
+                        },
+                        {
+                          "Utterance": "Give details of course"
+                        }
+                      ],
+                      "Slots": [
+                        {
+                          "Name": "course",
+                          "Description": "course",
+                          "SlotTypeName": "AMAZON.AlphaNumeric",
+                          "ValueElicitationSetting": {
+                            "SlotConstraint": "Required",
+                            "PromptSpecification": {
+                              "MessageGroupsList": [
+                                {
+                                  "Message": {
+                                    "PlainTextMessage": {
+                                      "Value": "Please give me course name"
+                                    }
+                                  }
+                                }
+                              ],
+                              "MaxRetries": 3,
+                              "AllowInterrupt": false
+                            }
+                          }
+                        }
+                      ],
+                      "FulfillmentCodeHook": {
+                        "Enabled": true
+                      }
+                    },
+                    {
+                      "Name": "StudentLogin",
+                      "Description": "Student Login",
+                      "SampleUtterances": [
+                        {
+                          "Utterance": "How to login as student ?"
+                        },
+                        {
+                          "Utterance": "How to register as student ?"
+                        },
+                        {
+                          "Utterance": "Student login"
+                        },
+                        {
+                          "Utterance": "Student Registration"
+                        }
+                      ],
+                      "IntentClosingSetting": {
+                        "ClosingResponse": {
+                          "MessageGroupsList": [
+                            {
+                              "Message": {
+                                "PlainTextMessage": {
+                                  "Value": "Following are steps to login as student :  1) click on student login button  2) if you are new user then click on register 3) Fill the registration form 4) Then login using registration details"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Name": "myProgress",
+                      "Description": "Student Progress",
+                      "SampleUtterances": [
+                        {
+                          "Utterance": "How to see my progress"
+                        },
+                        {
+                          "Utterance": "How to see my progress in course"
+                        },
+                        {
+                          "Utterance": "Student my progress"
+                        },
+                        {
+                          "Utterance": "my progress"
+                        }
+                      ],
+                      "IntentClosingSetting": {
+                        "ClosingResponse": {
+                          "MessageGroupsList": [
+                            {
+                              "Message": {
+                                "PlainTextMessage": {
+                                  "Value": "Following are steps to see progress :  1) Login as Student  2) Go to my courses 3) Select the course which you want to see the course progress 4) Click on go to course button  5) Then progress will be shown in that course"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Name": "studentsProgress",
+                      "Description": "Student Progress at provider side",
+                      "SampleUtterances": [
+                        {
+                          "Utterance": "How to see student progress"
+                        },
+                        {
+                          "Utterance": "I want student progress"
+                        }
+                      ],
+                      "IntentClosingSetting": {
+                        "ClosingResponse": {
+                          "MessageGroupsList": [
+                            {
+                              "Message": {
+                                "PlainTextMessage": {
+                                  "Value": "Following are steps to see students progress :  1) Login as Provider 2) Go to dashboard 3) Select the course in which you want to see students progress and click on go to course button 4) In the course at the bottom students progress table will be shown with their Email and Progress"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Name": "updateCourse",
+                      "Description": "Provider Update Course",
+                      "SampleUtterances": [
+                        {
+                          "Utterance": "How to update course"
+                        },
+                        {
+                          "Utterance": "update course"
+                        }
+                      ],
+                      "IntentClosingSetting": {
+                        "ClosingResponse": {
+                          "MessageGroupsList": [
+                            {
+                              "Message": {
+                                "PlainTextMessage": {
+                                  "Value": "Following are steps to update course :  1) Login as Provider  2) Go to dashboard 3) Select the course you want to update and click on go to course button 4) Then click on update button to update the course 5) Then fill the form to update the course  6) Click on Update button"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Name": "deleteCourse",
+                      "Description": "Delete Course at provider side",
+                      "SampleUtterances": [
+                        {
+                          "Utterance": "How to delete course"
+                        },
+                        {
+                          "Utterance": "delete course"
+                        }
+                      ],
+                      "IntentClosingSetting": {
+                        "ClosingResponse": {
+                          "MessageGroupsList": [
+                            {
+                              "Message": {
+                                "PlainTextMessage": {
+                                  "Value": "Following are steps to delete course :  1) Login as Provider  2) Go to dashboard 3) Select the course you want to delete and click on go to course button 4) Then click on delete button to delete the course 5) Then confirmation message will be display  6) Click on confirm if you want delete the course"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Name": "createCourse",
+                      "Description": "provider create course",
+                      "SampleUtterances": [
+                        {
+                          "Utterance": "How to create course"
+                        },
+                        {
+                          "Utterance": "create course"
+                        },
+                        {
+                          "Utterance": "how to upload course"
+                        },
+                        {
+                          "Utterance": "upload course"
+                        }
+                      ],
+                      "IntentClosingSetting": {
+                        "ClosingResponse": {
+                          "MessageGroupsList": [
+                            {
+                              "Message": {
+                                "PlainTextMessage": {
+                                  "Value": "Following are steps to create course :  1) Login as Provider  2) Go to create course tab  3) Fill the form to upload the course  4) Click on upload  5) Then course will be shown in dashboard "
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Name": "enrollCourse",
+                      "Description": "Enroll course",
+                      "SampleUtterances": [
+                        {
+                          "Utterance": "How to enroll course"
+                        },
+                        {
+                          "Utterance": "enroll course"
+                        },
+                        {
+                          "Utterance": "course enrollment"
+                        },
+                        {
+                          "Utterance": "enroll for course"
+                        }
+                      ],
+                      "IntentClosingSetting": {
+                        "ClosingResponse": {
+                          "MessageGroupsList": [
+                            {
+                              "Message": {
+                                "PlainTextMessage": {
+                                  "Value": "To enroll in the course, follow these steps:  1. Login as Student   2. Go to dashboard   3. Select the course from dashboard you want to enroll 4. Click on Take Course button 5. Then course will be shown in my courses."
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Name": "userGreetings",
+                      "Description": "greetings",
+                      "SampleUtterances": [
+                        {
+                          "Utterance": "Hello"
+                        },
+                        {
+                          "Utterance": "Hello bot"
+                        },
+                        {
+                          "Utterance": "Hello e-learn bot"
+                        }
+                      ],
+                      "IntentClosingSetting": {
+                        "ClosingResponse": {
+                          "MessageGroupsList": [
+                            {
+                              "Message": {
+                                "PlainTextMessage": {
+                                  "Value": "Hello! How may i help you?"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Name": "FallbackIntent",
+                      "Description": "Default intent when no other intent matches",
+                      "ParentIntentSignature": "AMAZON.FallbackIntent"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "ELearnServerlessBotVersionWithCFN": {
+            "DependsOn": [
+              "ELearnServerlessTemplateBot"
+            ],
+            "Type": "AWS::Lex::BotVersion",
+            "Properties": {
+              "BotId": {
+                "Ref": "ELearnServerlessTemplateBot"
+              },
+              "BotVersionLocaleSpecification": [
+                {
+                  "LocaleId": "en_US",
+                  "BotVersionLocaleDetails": {
+                    "SourceBotVersion": "DRAFT"
+                  }
+                }
+              ],
+              "Description": "E-Learn_Serverless Version"
+            }
+          },
+          "FirstBotAliasWithCFN": {
+            "DependsOn": [
+              "ELearnServerlessBotVersionWithCFN"
+            ],
+            "Type": "AWS::Lex::BotAlias",
+            "Properties": {
+              "BotId": {
+                "Ref": "ELearnServerlessTemplateBot"
+              },
+              "BotAliasName": "ELearnServerlessVersion1Alias",
+              "BotAliasLocaleSettings": [
+                {
+                  "LocaleId": "en_US",
+                  "BotAliasLocaleSetting": {
+                    "Enabled": false,
+                    "CodeHookSpecification": {
+                      "LambdaCodeHook": {
+                        "CodeHookInterfaceVersion": "1.0",
+                        "LambdaArn": "arn:aws:lambda:ap-northeast-1:647546954188:function:botCourseDetails"
+                      }
+                    }
+                  }
+                }
+              ],
+              "BotVersion": {
+                "Fn::GetAtt": [
+                  "ELearnServerlessBotVersionWithCFN",
+                  "BotVersion"
+                ]
+              },
+              "SentimentAnalysisSettings": {
+                "DetectSentiment": true
+              }
+            }
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": {
+              "Ref": "ServerlessDeploymentBucket"
+            },
+            "Export": {
+              "Name": "sls-elearn-bot-serverless2-dev-ServerlessDeploymentBucketName"
+            }
+          }
+        }
+      },
+      "coreCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "ServerlessDeploymentBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketEncryption": {
+                "ServerSideEncryptionConfiguration": [
+                  {
+                    "ServerSideEncryptionByDefault": {
+                      "SSEAlgorithm": "AES256"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": {
+              "Ref": "ServerlessDeploymentBucket"
+            }
+          }
+        }
+      }
+    },
+    "pluginsData": {},
+    "functions": {},
+    "resources": {
+      "Resources": {
+        "BotRuntimeRole": {
+          "Type": "AWS::IAM::Role",
+          "Properties": {
+            "AssumeRolePolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Principal": {
+                    "Service": [
+                      "lexv2.amazonaws.com"
+                    ]
+                  },
+                  "Action": [
+                    "sts:AssumeRole"
+                  ]
+                }
+              ]
+            },
+            "Path": "/",
+            "Policies": [
+              {
+                "PolicyName": "AmazonLexV2BotPolicy",
+                "PolicyDocument": {
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "lex:PostText"
+                      ],
+                      "Resource": "*"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "ELearnServerlessTemplateBot": {
+          "DependsOn": [
+            "BotRuntimeRole"
+          ],
+          "Type": "AWS::Lex::Bot",
+          "Properties": {
+            "Name": "E-LearnServerlessBot",
+            "RoleArn": {
+              "Fn::GetAtt": [
+                "BotRuntimeRole",
+                "Arn"
+              ]
+            },
+            "DataPrivacy": {
+              "ChildDirected": false
+            },
+            "IdleSessionTTLInSeconds": 300,
+            "Description": "E-Learn online learning platform",
+            "AutoBuildBotLocales": false,
+            "BotLocales": [
+              {
+                "LocaleId": "en_US",
+                "Description": "Book a trip bot Locale",
+                "NluConfidenceThreshold": 0.4,
+                "Intents": [
+                  {
+                    "Name": "providerLogin",
+                    "Description": "Provider Login",
+                    "SampleUtterances": [
+                      {
+                        "Utterance": "How to login as provider?"
+                      },
+                      {
+                        "Utterance": "How to register as provider?"
+                      },
+                      {
+                        "Utterance": "Provider login"
+                      },
+                      {
+                        "Utterance": "Provider Registration"
+                      }
+                    ],
+                    "IntentClosingSetting": {
+                      "ClosingResponse": {
+                        "MessageGroupsList": [
+                          {
+                            "Message": {
+                              "PlainTextMessage": {
+                                "Value": "Following are steps to login as Provider :  1) click on provider login button 2) if you are new user then click on register 3) Fill the registration form 4) Then login using registration details"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "Name": "courseDetails",
+                    "Description": "course Details",
+                    "SampleUtterances": [
+                      {
+                        "Utterance": "Give me details of course"
+                      },
+                      {
+                        "Utterance": "Give me details of {course}"
+                      },
+                      {
+                        "Utterance": "Give details of {course}"
+                      },
+                      {
+                        "Utterance": "Give details of course"
+                      }
+                    ],
+                    "Slots": [
+                      {
+                        "Name": "course",
+                        "Description": "course",
+                        "SlotTypeName": "AMAZON.AlphaNumeric",
+                        "ValueElicitationSetting": {
+                          "SlotConstraint": "Required",
+                          "PromptSpecification": {
+                            "MessageGroupsList": [
+                              {
+                                "Message": {
+                                  "PlainTextMessage": {
+                                    "Value": "Please give me course name"
+                                  }
+                                }
+                              }
+                            ],
+                            "MaxRetries": 3,
+                            "AllowInterrupt": false
+                          }
+                        }
+                      }
+                    ],
+                    "FulfillmentCodeHook": {
+                      "Enabled": true
+                    }
+                  },
+                  {
+                    "Name": "StudentLogin",
+                    "Description": "Student Login",
+                    "SampleUtterances": [
+                      {
+                        "Utterance": "How to login as student ?"
+                      },
+                      {
+                        "Utterance": "How to register as student ?"
+                      },
+                      {
+                        "Utterance": "Student login"
+                      },
+                      {
+                        "Utterance": "Student Registration"
+                      }
+                    ],
+                    "IntentClosingSetting": {
+                      "ClosingResponse": {
+                        "MessageGroupsList": [
+                          {
+                            "Message": {
+                              "PlainTextMessage": {
+                                "Value": "Following are steps to login as student :  1) click on student login button  2) if you are new user then click on register 3) Fill the registration form 4) Then login using registration details"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "Name": "myProgress",
+                    "Description": "Student Progress",
+                    "SampleUtterances": [
+                      {
+                        "Utterance": "How to see my progress"
+                      },
+                      {
+                        "Utterance": "How to see my progress in course"
+                      },
+                      {
+                        "Utterance": "Student my progress"
+                      },
+                      {
+                        "Utterance": "my progress"
+                      }
+                    ],
+                    "IntentClosingSetting": {
+                      "ClosingResponse": {
+                        "MessageGroupsList": [
+                          {
+                            "Message": {
+                              "PlainTextMessage": {
+                                "Value": "Following are steps to see progress :  1) Login as Student  2) Go to my courses 3) Select the course which you want to see the course progress 4) Click on go to course button  5) Then progress will be shown in that course"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "Name": "studentsProgress",
+                    "Description": "Student Progress at provider side",
+                    "SampleUtterances": [
+                      {
+                        "Utterance": "How to see student progress"
+                      },
+                      {
+                        "Utterance": "I want student progress"
+                      }
+                    ],
+                    "IntentClosingSetting": {
+                      "ClosingResponse": {
+                        "MessageGroupsList": [
+                          {
+                            "Message": {
+                              "PlainTextMessage": {
+                                "Value": "Following are steps to see students progress :  1) Login as Provider 2) Go to dashboard 3) Select the course in which you want to see students progress and click on go to course button 4) In the course at the bottom students progress table will be shown with their Email and Progress"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "Name": "updateCourse",
+                    "Description": "Provider Update Course",
+                    "SampleUtterances": [
+                      {
+                        "Utterance": "How to update course"
+                      },
+                      {
+                        "Utterance": "update course"
+                      }
+                    ],
+                    "IntentClosingSetting": {
+                      "ClosingResponse": {
+                        "MessageGroupsList": [
+                          {
+                            "Message": {
+                              "PlainTextMessage": {
+                                "Value": "Following are steps to update course :  1) Login as Provider  2) Go to dashboard 3) Select the course you want to update and click on go to course button 4) Then click on update button to update the course 5) Then fill the form to update the course  6) Click on Update button"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "Name": "deleteCourse",
+                    "Description": "Delete Course at provider side",
+                    "SampleUtterances": [
+                      {
+                        "Utterance": "How to delete course"
+                      },
+                      {
+                        "Utterance": "delete course"
+                      }
+                    ],
+                    "IntentClosingSetting": {
+                      "ClosingResponse": {
+                        "MessageGroupsList": [
+                          {
+                            "Message": {
+                              "PlainTextMessage": {
+                                "Value": "Following are steps to delete course :  1) Login as Provider  2) Go to dashboard 3) Select the course you want to delete and click on go to course button 4) Then click on delete button to delete the course 5) Then confirmation message will be display  6) Click on confirm if you want delete the course"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "Name": "createCourse",
+                    "Description": "provider create course",
+                    "SampleUtterances": [
+                      {
+                        "Utterance": "How to create course"
+                      },
+                      {
+                        "Utterance": "create course"
+                      },
+                      {
+                        "Utterance": "how to upload course"
+                      },
+                      {
+                        "Utterance": "upload course"
+                      }
+                    ],
+                    "IntentClosingSetting": {
+                      "ClosingResponse": {
+                        "MessageGroupsList": [
+                          {
+                            "Message": {
+                              "PlainTextMessage": {
+                                "Value": "Following are steps to create course :  1) Login as Provider  2) Go to create course tab  3) Fill the form to upload the course  4) Click on upload  5) Then course will be shown in dashboard "
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "Name": "enrollCourse",
+                    "Description": "Enroll course",
+                    "SampleUtterances": [
+                      {
+                        "Utterance": "How to enroll course"
+                      },
+                      {
+                        "Utterance": "enroll course"
+                      },
+                      {
+                        "Utterance": "course enrollment"
+                      },
+                      {
+                        "Utterance": "enroll for course"
+                      }
+                    ],
+                    "IntentClosingSetting": {
+                      "ClosingResponse": {
+                        "MessageGroupsList": [
+                          {
+                            "Message": {
+                              "PlainTextMessage": {
+                                "Value": "To enroll in the course, follow these steps:  1. Login as Student   2. Go to dashboard   3. Select the course from dashboard you want to enroll 4. Click on Take Course button 5. Then course will be shown in my courses."
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "Name": "userGreetings",
+                    "Description": "greetings",
+                    "SampleUtterances": [
+                      {
+                        "Utterance": "Hello"
+                      },
+                      {
+                        "Utterance": "Hello bot"
+                      },
+                      {
+                        "Utterance": "Hello e-learn bot"
+                      }
+                    ],
+                    "IntentClosingSetting": {
+                      "ClosingResponse": {
+                        "MessageGroupsList": [
+                          {
+                            "Message": {
+                              "PlainTextMessage": {
+                                "Value": "Hello! How may i help you?"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "Name": "FallbackIntent",
+                    "Description": "Default intent when no other intent matches",
+                    "ParentIntentSignature": "AMAZON.FallbackIntent"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "ELearnServerlessBotVersionWithCFN": {
+          "DependsOn": [
+            "ELearnServerlessTemplateBot"
+          ],
+          "Type": "AWS::Lex::BotVersion",
+          "Properties": {
+            "BotId": {
+              "Ref": "ELearnServerlessTemplateBot"
+            },
+            "BotVersionLocaleSpecification": [
+              {
+                "LocaleId": "en_US",
+                "BotVersionLocaleDetails": {
+                  "SourceBotVersion": "DRAFT"
+                }
+              }
+            ],
+            "Description": "E-Learn_Serverless Version"
+          }
+        },
+        "FirstBotAliasWithCFN": {
+          "DependsOn": [
+            "ELearnServerlessBotVersionWithCFN"
+          ],
+          "Type": "AWS::Lex::BotAlias",
+          "Properties": {
+            "BotId": {
+              "Ref": "ELearnServerlessTemplateBot"
+            },
+            "BotAliasName": "ELearnServerlessVersion1Alias",
+            "BotAliasLocaleSettings": [
+              {
+                "LocaleId": "en_US",
+                "BotAliasLocaleSetting": {
+                  "Enabled": false,
+                  "CodeHookSpecification": {
+                    "LambdaCodeHook": {
+                      "CodeHookInterfaceVersion": "1.0",
+                      "LambdaArn": "arn:aws:lambda:ap-northeast-1:647546954188:function:botCourseDetails"
+                    }
+                  }
+                }
+              }
+            ],
+            "BotVersion": {
+              "Fn::GetAtt": [
+                "ELearnServerlessBotVersionWithCFN",
+                "BotVersion"
+              ]
+            },
+            "SentimentAnalysisSettings": {
+              "DetectSentiment": true
+            }
+          }
+        }
+      },
+      "Outputs": {}
+    },
+    "configValidationMode": "warn",
+    "serviceFilename": "serverless.yaml",
+    "initialServerlessConfig": {
+      "service": "elearn-bot-serverless2",
+      "provider": {
+        "$ref": "$[\"service\"][\"provider\"]"
+      },
+      "resources": {
+        "$ref": "$[\"service\"][\"resources\"]"
+      }
+    },
+    "layers": {},
+    "isDashboardMonitoringPreconfigured": false
+  },
+  "package": {
+    "artifactDirectoryName": "serverless/elearn-bot-serverless2/dev/1680463038419-2023-04-02T19:17:18.419Z",
+    "artifact": ""
+  }
+}

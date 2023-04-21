@@ -26,8 +26,10 @@ export class SignInComponent {
     this.message="";
     this.cognitoService.signIn(this.user)
     .then(() => {
-      this.router.navigate(['/student/profile']);
+     
+      this.router.navigate(['student/student-dashbord']);
     }).catch((err) => {
+      
       this.loading = false;
       this.message=err;
     });

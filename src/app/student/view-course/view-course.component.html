@@ -1,0 +1,63 @@
+<header>
+  <nav class="navbar navbar-expand-sm navbar-light bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand text-white" href="#"><h3>E-learn</h3></a>
+  
+      <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="icon-white navbar-toggler-icon"></span>
+      </button>
+  
+      <div id="navbarContent" class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link text-white" routerLink="/student/profile" routerLinkActive="active" *ngIf="isAuthenticated">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" routerLink="/student/student-dashbord" routerLinkActive="active" *ngIf="isAuthenticated">Dashbord</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" routerLink="/student/my-courses" routerLinkActive="active" *ngIf="isAuthenticated">My Courses</a>
+          </li>
+          <li>
+            <a class="nav-link text-white" (click)="onHelp()"  routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}" >Help</a>
+          </li>
+        </ul>
+        <span class="flex-d"><a class="text-white btn btn-warning p-2" routerLink="" (click)="signOut()" *ngIf="isAuthenticated"><b> Sign out</b></a></span>
+      </div>
+    </div>
+  </nav>
+  </header>
+  <aside class="chat col-lg-4 col-sm-12" *ngIf="help==true">
+    <app-my-chat-bot></app-my-chat-bot>
+  </aside>
+    <main *ngIf="course?.CourseDetails">
+      <div class="container mt-5">
+      <div class="row text-center mt-5">
+        
+      <h2>{{course.CourseDetails.title}}</h2>
+      
+    </div>
+      <div class="row mt-3">
+      <h4>Description:</h4><p> {{course.CourseDetails.description}}</p>
+      <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width.%]="progess">
+        {{progess}}
+          </div>
+    </div>
+    <div class="mt-5 text-center">
+      <h4>Video</h4>
+      <hr>
+    </div>
+      <div class="my-5 text-center">
+    <video  class="border"   width="320" *ngIf="course.CourseDetails.videoUrl" id="video" (timeupdate)="onTimeUpdate()" (end)="completeCourse()" height="240" controls>
+      <source src={{course.CourseDetails.videoUrl}} type="video/mp4">
+      
+    Your browser does not support the video tag.
+    </video>
+    
+    <hr> 
+    
+  </div>
+  
+  </div>
+  
+  </main>

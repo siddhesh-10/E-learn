@@ -32,7 +32,7 @@ export class CognitoService {
     Amplify.configure({
       Auth: environment.cognito,
     });
-
+console.log("amplify cognito config");
     this.authenticationSubject = new BehaviorSubject<boolean>(false);
   }
 
@@ -80,7 +80,12 @@ export class CognitoService {
   }
 
   public getUser(): Promise<any> {
-    return Auth.currentUserInfo();
+ return Auth.currentAuthenticatedUser().then((data) => {
+      // console.log(JSON.stringify(data));
+      // console.log("/;/")
+      // console.log(JSON.stringify(Auth));
+      return data;
+    });
   }
 
   public updateUser(user: IUser): Promise<any> {
