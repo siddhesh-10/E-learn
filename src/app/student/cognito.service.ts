@@ -73,7 +73,7 @@ export class CognitoService {
     } else {
       return this.getUser()
       .then((user: any) => {
-        
+       // console.log(user+"in cognito");
         if (user) {
           return true;
         } else {
@@ -86,11 +86,11 @@ export class CognitoService {
   }
 
   public getUser(): Promise<any> {
-    return Auth.currentUserInfo();
+    return Auth.currentAuthenticatedUser();
   }
 
   public updateUser(user: IUser): Promise<any> {
-    return Auth.currentUserPoolUser()
+    return Auth.currentUserPoolUser() 
     .then((cognitoUser: any) => {
       return Auth.updateUserAttributes(cognitoUser, user);
     });

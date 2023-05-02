@@ -26,7 +26,7 @@ export class SignInComponent {
     this.message="";
     this.cognitoService.signIn(this.user)
     .then(() => {
-      
+     
       this.router.navigate(['student/student-dashbord']);
     }).catch((err) => {
       

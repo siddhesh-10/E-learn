@@ -1,0 +1,41 @@
+<!-- <header></header>
+
+<div class="content banner" role="main">
+    <div class="row">
+      <div class="col-lg-6 center col-sm-10">
+    <textarea readonly="readonly" name="conversation" [(ngModel)]="conversation" rows="10" cols="50"></textarea>
+  </div>
+</div>
+      <br/>
+      <div class="row " >
+        <div class="col-lg-6 center col-sm-10">
+      <span><input type="text" size="41" name="message" [(ngModel)]="message"  style="line-height:2.0em;" enterkeyhint=""/>
+      <button (click)="startChat()" type="button" style="line-height: 2em;">Send</button></span>
+    </div>
+    </div>
+  </div> -->
+  <aside class="bg-light" *ngIf="close==false">
+    <div>
+      <img src="../../assets/bot1.png" alt="bot" height="40vh">
+      <strong class="p-5">Welcome to help desk</strong>
+      <button class="close p-2" (click)="onClose()"><i class="btn-close"></i></button>
+    </div>
+    <div class="chat-window">
+      <div class="chat">
+      <div class="message-container" *ngFor="let message of messages">
+        <div [ngClass]="{'sent': message.sentByUser, 'received': !message.sentByUser}" class="message">
+          {{ message.content }}
+        </div>
+      </div>
+    </div>
+      <div class="row inputrow">
+        <div class="col-lg-9">
+          <input type="text" size="49" name="message" [(ngModel)]="message" style="line-height:2.0em;" enterkeyhint="" />
+        </div>
+        <div class="col-lg-1">
+          <button class="px-4" (click)="startChat()" type="button" style="line-height: 2em;">Send</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+  

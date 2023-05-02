@@ -17,6 +17,9 @@ import { UpdateCourseComponent } from './provider/update-course/update-course.co
 import { StudentDashbordComponent } from './student/student-dashbord/student-dashbord.component';
 import { MyCoursesComponent } from './student/my-courses/my-courses.component';
 import { ViewCourseComponent } from './student/view-course/view-course.component';
+import { MyChatBotComponent } from './my-chat-bot/my-chat-bot.component';
+import { ConnectComponent } from './provider/connect/connect.component';
+import { CcpComponent } from './provider/ccp/ccp.component';
 const routes: Routes = [
   
   
@@ -28,6 +31,8 @@ const routes: Routes = [
   {path:'provider/create-course',component:CreateCourseComponent},
   {path:'provider/dashbord', component:ProviderDashbordComponent},
   {path:'provider/update-course', component:UpdateCourseComponent},
+  {path:'provider/connect', component:ConnectComponent},
+  {path:'ccpconnect', component:CcpComponent},
   {path:'student', component:Student},
   {path:'student/sign-in', component:studSignInComponent},
   {path:'student/sign-up',component:studSignUpComponent},
@@ -35,6 +40,7 @@ const routes: Routes = [
   {path:'student/student-dashbord', component:StudentDashbordComponent},
   {path:'student/my-courses', component:MyCoursesComponent},
   {path:'student/view-course', component:ViewCourseComponent},
+  {path:'help', component:MyChatBotComponent},
   {path:'**', component:AppComponent}
 ];
 

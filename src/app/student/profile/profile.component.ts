@@ -12,6 +12,16 @@ export class ProfileComponent implements OnInit {
   loading: boolean;
   user: IUser;
   isAuthenticated: boolean;
+  help:boolean=false;
+  onHelp(){
+    if(this.help==false){
+      this.help=true;
+    }
+    else if(this.help==true){
+      this.help=false;
+    }
+    
+  }
   constructor(private router: Router,private cognitoService: CognitoService) {
     this.loading = false;
     this.user = {} as IUser;

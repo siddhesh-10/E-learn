@@ -27,6 +27,16 @@ export class ProviderDashbordComponent implements OnInit{
   };
   myArray: any[]=[];
   objectKeys = Object.keys;
+  help:boolean=false;
+  onHelp(){
+    if(this.help==false){
+      this.help=true;
+    }
+    else if(this.help==true){
+      this.help=false;
+    }
+    
+  }
   constructor(private router: Router,private cognitoService: CognitoService,private getCoursesService:GetCoursesService) {
     this.loading = false;
     this.user = {} as IUser;
@@ -61,7 +71,7 @@ export class ProviderDashbordComponent implements OnInit{
       this.getCoursesService.getCourses(user.attributes.email).subscribe((data: any) => {
         this.courseData=data;
          this.myArray = Object.keys(data).map(key => ({key, value: data[key]}));
-        
+       // console.log(JSON.stringify(this.courseData));
         this.loading=false;
       });
     });

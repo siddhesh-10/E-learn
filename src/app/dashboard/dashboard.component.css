@@ -7,14 +7,164 @@ header{
     box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.3);
 }
 
-main{
-    height: 100vh;
-  top:0px;
-    background-image:url("../../assets/bg1.png")!important;
-    background-repeat: no-repeat;
-    background-size: cover;
+.navbar-brand{
+    color: #000;
 }
 
-.tall{
-    height: 12vh;
+.navbar-light .navbar-nav .nav-link
+{
+    color: var(--secondary-color);
 }
+.navbar-light .navbar-nav .nav-link.active-link
+{
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+.banner
+{
+    background-image:  url("../../assets/bg1.png")!important;
+    height: 600px;
+    background-position: center top;
+    background-size: cover;
+}
+.content
+{
+    top: 20%;
+    left: 5%;
+    position: absolute;
+}
+.content h1 
+{
+    color: #fff;
+    font-size: 60px;
+    font-weight: bold;
+  
+}
+.content a 
+{
+    text-decoration: none;
+    background-color: #028b15;
+    color: var(--primary-color);
+    padding: 15px 20px;
+    border-radius: 5px;
+}
+
+.content a:hover 
+{
+    background-color: var(--primary-color);
+    color: #0cbc20;
+}
+
+.text-center{
+    color: green;
+    font-size: larger;
+}
+.stepBox 
+{
+    background-color: #000;
+    padding: 20px 20px;
+    border-radius: 5px;
+    text-align: center;
+    color: green;
+}
+.stepBox h1 
+{
+    font-size: 50px;
+    font-weight: bold;
+    color:var(--primary-color);
+}
+.stepBox p 
+{
+    font-size: 20px;
+    font-style: italic;
+    color: #fff;
+}
+.highlight
+{
+    color: var(--primary-color);
+    font-weight: bold;
+    font-style: italic;
+    text-decoration: underline;
+}
+
+.foodbox 
+{
+    padding: 10px 5px;
+} 
+.foodbox img
+{
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.foodbox h1 
+{
+    font-size: 18px;
+    margin-top: 20px;
+    font-weight: bold;
+    color: #000;
+    text-align: center;
+}
+.foodbox  
+{
+    font-size: 18px;
+    margin-top: 20px;
+    font-weight: bold;
+    color: #000;
+}
+.viewmorebtn
+{
+    text-decoration: none;
+    background-color:var(--primary-color);
+    color: #000;
+    padding: 10px 10px;
+    border-radius: 5px;
+    font-size: 18px;
+    
+}
+
+@media screen and (max-width:600px)
+{
+    .banner
+{
+    height: 700px;
+}
+}
+
+.footer
+{
+    overflow: hidden;
+    position: sticky;
+    top: 100%;
+    background-color:#000;
+    padding: 20px 10px;
+}
+
+h1 
+{
+    font-weight: bold;
+    color: #fff;
+    font-size: 20px;
+}
+p 
+{
+    color: #fff;
+    font-size: 12px;
+}
+a 
+{
+    color: #fff;
+    text-decoration: none;
+    padding: 0px 10px;
+    font-size: 17px;
+}
+a:hover 
+{
+    color: var(--primary-color);
+}
+i 
+{
+    padding: 0px 10px;
+}
+

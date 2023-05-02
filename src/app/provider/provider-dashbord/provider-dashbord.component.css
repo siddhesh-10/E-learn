@@ -8,5 +8,8 @@ header{
 }
 
 main{
-    margin-top: 8%;
+   margin-top: 12vh;
 }
+.icon-white {
+    color: white !important;
+  }

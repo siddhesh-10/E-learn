@@ -9,3 +9,6 @@ main{
 .tall{
     height: 12vh;
 }
+.icon-white {
+    color: white !important;
+  }

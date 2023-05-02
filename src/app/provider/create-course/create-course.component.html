@@ -4,7 +4,7 @@
     <a class="navbar-brand text-white" href="#"><h3>E-learn</h3></a>
 
     <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+      <span class="navbar-toggler-icon icon-white"></span>
     </button>
 
     <div id="navbarContent" class="collapse navbar-collapse">
@@ -18,12 +18,18 @@
         <li class="nav-item">
           <a class="nav-link text-white" routerLink="/provider/create-course" routerLinkActive="active" *ngIf="isAuthenticated">Create</a>
         </li>
+        <li>
+          <a class="nav-link text-white" (click)="onHelp()"  routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}" >Help</a>
+        </li>
       </ul>
       <span class="d-flex"><a class="btn btn-warning text-white" routerLink="" (click)="signOut()" *ngIf="isAuthenticated"><b>Sign out</b></a></span>
     </div>
   </div>
 </nav>
 </header>
+<aside class="chat col-lg-4 col-sm-12" *ngIf="help==true">
+  <app-my-chat-bot></app-my-chat-bot>
+</aside>
 <main>
   <div class="tall"></div>
   <div class="row mt-2">

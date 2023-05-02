@@ -1,0 +1,18 @@
+.floating-window {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    /* height: 320px; */
+    cursor: move;
+   
+  }
+  #ccp {
+    height: 300px;
+  }
+  .float
+  {
+    background-color:black ;
+    color: aqua;
+    text-align: center;
+  }

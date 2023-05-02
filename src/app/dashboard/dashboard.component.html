@@ -1,39 +1,98 @@
 <header>
-<nav class="bg-dark p-2" role="alert">
-    <h3 class="text-white">E-learn</h3>
-</nav>
-</header>
-<main>
-<div class="tall"></div>
-  <section>
-    <div class="row mx-5">
-      <div class="col-lg-6 col-sm-12">
-        <div class="card mb-3">
-          <div class="card-body text-center">
-            <div>
-            <h5 class="card-title mb-5">Provider Login</h5>
-          </div>
-          <div>
-            <a routerLink="/provider/sign-in" class="btn btn-primary mx-5 my-3 px-3">Login</a>
-            <!-- <button (click)="login()"></button> -->
-            <a routerLink="/provider/sign-up" class="btn btn-primary">Register</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-6 col-sm-12">
-        <div class="card">
-          <div class="card-body text-center">
-            <div>
-            <h5 class="card-title">Student Login</h5>
-          </div>
-          <div class="text-center mt-5">
-            <a routerLink="/student/sign-in"  class="btn btn-primary mx-5 my-3 px-3">Login</a>
-            <a routerLink="/student/sign-up" class="btn btn-primary">Register</a>
-          </div>
-          </div>
-        </div>
-      </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand text-white" routerLink=""><h3>E-Learn</h3></a>
+    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon icon-white"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link text-white" routerLink=""  routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}" >Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" (click)="onHelp()"  routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}" >Help</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white btn btn-warning" routerLink="/student/sign-in" routerLinkActive="active-link">Log In</a>
+        </li>
+        
+        <!-- <li class="nav-item">
+          <a class="nav-link" routerLink="/about" routerLinkActive="active-link">About</a>
+        </li> -->
+      </ul>
     </div>
-  </section>
-    </main>
+  </div>
+</nav>   
+</header>  
+  <div class="banner">
+    <div class="content">
+        <h1 class="mb-5">Learning that gets you <br>
+            Skills for your present <br> and your future.</h1>
+              <br/> <h3>Get started with us</h3> <br>
+        <a class="btn btn-success" routerLink="/student/sign-up"><b>REGISTER NOW</b><i class="bi bi-arrow-right"></i></a>
+    </div>
+  </div>
+  <aside id="chat" class="chat col-lg-4 col-sm-12" *ngIf="help==true">
+    <app-my-chat-bot></app-my-chat-bot>
+  </aside>
+  <!-- step  -->
+<div class="container mt-5 mb-5">
+  <h1 class="text-center">How to get<span class="highlight"> Courses</span></h1>
+    <div class="row mt-5">
+        <!-- one  -->
+        <div class="col-lg-4 mt-2">
+            <div class="stepBox">
+                <h1>1</h1>
+                <p>Sign Up</p>
+            </div>
+        </div>
+  <!-- two -->
+        <div class="col-lg-4 mt-2">
+            <div class="stepBox">
+                <h1>2</h1>
+                <p>Enroll Courses</p>
+            </div>
+        </div>
+        <!-- three  -->
+        <div class="col-lg-4 mt-2">
+            <div class="stepBox">
+                <h1>3</h1>
+                <p>Build Your Future</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <!-- foodbox  -->
+<div class="container mt-4 mb-4">
+    <h1 class="text-center">Learners <span class="highlight">Favourites Courses</span></h1>
+    <div class="row">
+        <div class="col-lg-3 mt-3" *ngFor="let cd of courseData;index as i">
+            <div class="foodbox" *ngIf="i<=3">
+                <img src="{{cd.courseImg}}" />
+                <h1>{{cd.courseName}}</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid footer mt-5">
+  <div class="row">
+      <!-- name  -->
+      <div class="col-lg-6 mt-3 mb-3">
+          <h1>E-Learn</h1>
+          <p>Be a Reader, be a Writer, be a Problem Solver</p>
+      </div>
+      <!-- nav  -->
+      <div class="col-lg-6 mt-3 mb-3">
+        <h1>Online Learning</h1>
+        <p>All rights are reserved Copyright@2023</p>
+      </div>
+      <!-- socialmedia -->
+      <div class="col-lg-4 mt-3 mb-3">
+        <p>SPARThoughts Private Limited</p>
+      </div>
+  </div>
+</div>
+  

@@ -19,6 +19,36 @@ import { UpdateCourseComponent } from './provider/update-course/update-course.co
 import { StudentDashbordComponent } from './student/student-dashbord/student-dashbord.component';
 import { MyCoursesComponent } from './student/my-courses/my-courses.component';
 import { ViewCourseComponent } from './student/view-course/view-course.component';
+import { MyChatBotComponent } from './my-chat-bot/my-chat-bot.component';
+import { Amplify } from 'aws-amplify';
+import { AWSLexV2Provider } from '@aws-amplify/interactions';
+import { ConnectComponent } from './provider/connect/connect.component';
+import { CcpComponent } from './provider/ccp/ccp.component';
+import {CdkDrag} from '@angular/cdk/drag-drop'
+
+
+Amplify.addPluggable(new AWSLexV2Provider());
+
+const interactionsConfig = {
+    Auth: {
+        identityPoolId: "ap-northeast-1:524349b4-0cb4-4b83-b2bd-23880a80bf95",
+        region: "ap-northeast-1"
+    },
+    Interactions: {
+        bots: {
+            "E-Learn": {
+                name: "E-Learn",
+                aliasId: "TSTALIASID",
+                botId: "6YCONPHYL4",
+                localeId: "en_US",
+                region: "ap-northeast-1",
+                providerName: "AWSLexV2Provider",
+            },
+        }
+    }
+}
+
+Amplify.configure(interactionsConfig);
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,14 +66,18 @@ import { ViewCourseComponent } from './student/view-course/view-course.component
     UpdateCourseComponent,
     StudentDashbordComponent,
     MyCoursesComponent,
-    ViewCourseComponent
+    ViewCourseComponent,
+    MyChatBotComponent,
+    ConnectComponent,
+    CcpComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    CdkDrag
   ],
   providers: [],
   bootstrap: [AppComponent]
